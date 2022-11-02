@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>博客搭建测试</title>
+    <url>/text.html</url>
+    <content><![CDATA[<p>本地图片<br><img src="/text/google.png" alt="谷歌图片"><br>图床图片2<br><img src="https://s1.ax1x.com/2022/10/30/xIbkRO.jpg"><br>图窗图片3<br><a href="https://imgse.com/i/xIbaoq"><img src="https://s1.ax1x.com/2022/10/30/xIbaoq.png" alt="xIbaoq.png"></a><br>网络图片<br><img src="https://avatars2.githubusercontent.com/u/3265208?v=3&s=100"><br>pdf预览 </p>
+
+
+	<div class="row">
+    <embed src="https://cdn.jsdelivr.net/gh/Justlovesmile/CDN/pdf/小作文讲义.pdf" width="100%" height="550" type="application/pdf">
+	</div>
+
+
+  
+
+
+	<div class="row">
+    <embed src="./text/PRS.pdf" width="100%" height="550" type="application/pdf">
+	</div>
+
+
+  
+<p>预览  </p>
+<embed src="https://cdn.jsdelivr.net/gh/Justlovesmile/CDN/pdf/小作文讲义.pdf" width="100%" height="550" type="application/pdf">  
+预览  
+<embed src="./text/PRS.pdf" width="100%" height="550" type="application/pdf">  
+<!-- <object data="./text/PRS.pdf" width="100%" height="550" type="application/pdf"></object>   -->
+
+
+<!-- <iframe width="100%" scrolling=no height="800" frameborder="0" src="https://cdn.jsdelivr.net/gh/Justlovesmile/CDN/pdf/小作文讲义.pdf"></iframe>   -->
+<!-- <iframe width="100%" scrolling=no height="800" frameborder="0" src="./text/PRS.pdf"></iframe>   -->
+
+<p>pdf预览3</p>
+]]></content>
+      <categories>
+        <category>Hexo博客搭建</category>
+      </categories>
+      <tags>
+        <tag>个人博客搭建</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>DOA估计中信号是如何产生的？</title>
+    <url>/DOAExtimation-%E4%BF%A1%E5%8F%B7%E6%A8%A1%E5%9E%8B.html</url>
+    <content><![CDATA[<p>在2018年下半年开始接触DOA估计时，拿到程序就对信号产生存在疑问，多方求证思考，2019年得到这份答卷，2022年有了做个人网站（博客）的想法，把此问题整理，发布为本人的第一篇博客。</p>
+<p>无论是采用何种阵列、何种算法，经典的干涉仪测向算法也好，子空间类算法、稀疏重构类算法也罢，均匀阵列、稀疏阵列、MIMO等等各种阵列，仿真实验中，信号的产生模块都是相同的，有些时候，相关论文复现结果与论文原作者结果有较大差异，可能就是信号模型和原作者不同造成的。本博客就遇到的几种信号产生方法进行讨论，分析不同产生方法的原理、使用场景和一些小细节。</p>
+<h1 id="信号有关基础"><a href="#信号有关基础" class="headerlink" title="信号有关基础"></a>信号有关基础</h1><p>按照阵列接受数据模型 <em><strong>X&#x3D;AS+N</strong></em> ，其中 <em><strong>S</strong></em> 为信号， <em><strong>N</strong></em> 为噪声， <em><strong>X</strong></em> 为接收数据。<br>为了模拟实际情况，信号、噪声、接收数据通常为复数形式，复信号的频谱为单边带信号，相对于实信号，其有以下优点  </p>
+<blockquote>
+<p>避免混叠<br>节约带宽<br>不损失能量</p>
+</blockquote>
+<p>按照窄带随机过程的理论，将实信号变为复信号（解析信号），可通过希尔伯特变换，也可以通过复指数函数的方法。  </p>
+<p><img src="/DOAExtimation-%E4%BF%A1%E5%8F%B7%E6%A8%A1%E5%9E%8B/1.png" alt="窄带信号复指数两种表示"><br><img src="/DOAExtimation-%E4%BF%A1%E5%8F%B7%E6%A8%A1%E5%9E%8B/2.jpg" alt="窄带信号复指数频谱"><br><img src="/DOAExtimation-%E4%BF%A1%E5%8F%B7%E6%A8%A1%E5%9E%8B/3.jpg" alt="希尔伯特变换"><br><img src="/DOAExtimation-%E4%BF%A1%E5%8F%B7%E6%A8%A1%E5%9E%8B/4.jpg" alt="希尔伯特变换"></p>
+<h1 id="信号幅度和相位分布特性"><a href="#信号幅度和相位分布特性" class="headerlink" title="信号幅度和相位分布特性"></a>信号幅度和相位分布特性</h1><p>在 <strong>通信原理</strong> 理论中，信号在发射端到接收端，实际接收到的信号可能是衰落和时延都随时间变化的各路径的信号的合成。经过多径传播等因素影响，从波形上看，载波信号变成了包络和相位受到调制的窄带信号，从频谱上看，其变成了窄带频谱，即窄带随机过程。<br><img src="/DOAExtimation-%E4%BF%A1%E5%8F%B7%E6%A8%A1%E5%9E%8B/5.jpg" alt="多径衰落后的幅度和相位公式"><br>考察其幅度相位统计特性，当多径传播的路径充分大，其 <em><strong>幅度服从瑞利分布，相位一般服从均匀分布</strong></em><br><img src="/DOAExtimation-%E4%BF%A1%E5%8F%B7%E6%A8%A1%E5%9E%8B/6.jpg" alt="多径衰落后的幅度和相位分布"></p>
+<h1 id="何为瑞利分布"><a href="#何为瑞利分布" class="headerlink" title="何为瑞利分布"></a>何为瑞利分布</h1><p>当一个随机二维向量的两个分量呈独立的、有着相同的方差的正态分布时，这个向量的模呈瑞利分布。瑞利分布是最常见的用于描述平坦衰落信号接收包络或独立多径分量接受包络统计时变特性的一种分布类型。两个正交高斯噪声信号之和的包络服从瑞利分布。通信中很多信道的噪声满足这种分布。<br>瑞利分布的模的平方服从指数分布。<br>在通信系统中，随机接收信号的幅度通常用瑞利分布描述。<br>服从复高斯分布的变量的模用瑞丽分布描述。  </p>
+<h1 id="瑞利分布程序"><a href="#瑞利分布程序" class="headerlink" title="瑞利分布程序"></a>瑞利分布程序</h1><blockquote>
+<p>clear all;close all;<br>sigma&#x3D;2; % 瑞利分布参数sigma<br>fs&#x3D;1e7;   % 采样率，单位：Hz<br>t&#x3D;1e-3;   % 随机序列长度，单位：s<br>t1&#x3D;0:1&#x2F;fs:t-1&#x2F;fs;<br>n&#x3D;length(t1);<br>rand(‘state’,0); % 把均匀分布伪随机发生器置为0状态<br>u&#x3D;rand(1,n); % 产生（0-1）单位均匀信号<br>x&#x3D;sqrt(2*log2(1.&#x2F;u))*sigma; % 广义均匀分布与单位均匀分布之间的关系<br>subplot(211);plot(x); % 输出信号图<br>xlabel(‘t(单位:s)’);<br>title(‘瑞利分布信号’); % 输出信号的直方图<br>subplot(212);hist(x,0:0.2:20);<br>title(‘瑞利分布信号直方图’);<br>来源：张德丰编著 《MATLAB数字信号处理与应用》  北京:清华大学出版社,2010<br>链接：<a href="https://blog.csdn.net/u013346007/article/details/54310953">https://blog.csdn.net/u013346007/article/details/54310953</a></p>
+</blockquote>
+<ul>
+<li>瑞丽分布产生方式2<br><img src="/DOAExtimation-%E4%BF%A1%E5%8F%B7%E6%A8%A1%E5%9E%8B/7.jpg" alt="瑞丽分布产生2"><br>如图所示，产生的是正态分布的信号，根据 <strong>何为瑞利分布</strong>  所示，一个随机二维向量的两个分量呈独立的、有着相同的方差的正态分布时，这个向量的模呈瑞利分布，信号的实部如图7所示，虚部的模如图7所示，相位相差90°，其实部、虚部的模就是瑞利分布，如程序所示。</li>
+</ul>
+<h1 id="信号产生部分程序"><a href="#信号产生部分程序" class="headerlink" title="信号产生部分程序"></a>信号产生部分程序</h1><p>首先给出噪声部分程序  </p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">for m=1:sensorNum</span><br><span class="line">    for n=1:snapshots</span><br><span class="line">        p3=rand(1,1);</span><br><span class="line">        p4=rand(1,1);</span><br><span class="line">        wr(m,n)=sqrt(-2*log(p3))*cos(2*pi*p4);</span><br><span class="line">        wi(m,n)=sqrt(-2*log(p3))*sin(2*pi*p4);</span><br><span class="line">        NoiseMatrix(m,n)=wr(m,n)+1j*wi(m,n);</span><br><span class="line">    end</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+<p>信号的程序在噪声幅度上加上信噪比 </p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">for m=1:1  %注意此处m仅到1</span><br><span class="line">    for n=1:snapshots</span><br><span class="line">        p1=rand(1,1);</span><br><span class="line">        p2=rand(1,1);</span><br><span class="line">        sr(m,n)=snr*sqrt(-2*log(p1))*cos(2*pi*p2);</span><br><span class="line">        si(m,n)=snr*sqrt(-2*log(p1))*sin(2*pi*p2);</span><br><span class="line">        SourceMatrix(m,n)=sr(m,n)+1j*si(m,n);   %signal</span><br><span class="line">    end</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+
+
+<h1 id="产生方法2"><a href="#产生方法2" class="headerlink" title="产生方法2"></a>产生方法2</h1><p>上述给出了如何产生瑞丽分布的程序，理论中貌似是对的，但实际中，果真如此吗？这是值得商榷的事情<br>不难发现，在一众广为流传的程序中，还存在这样的信号产生方式</p>
+<blockquote>
+<p>A&#x3D;[exp(-j*(0:M-1)<em>d</em>2<em>pi</em>sin(doa(1)<em>pi&#x2F;180)&#x2F;l);exp(-j</em>(0:M-1)<em>d</em>2<em>pi</em>sin(doa(2)<em>pi&#x2F;180)&#x2F;l)].’;%阵列流型<br>t&#x3D;(0:N-1)<em>Ts;<br>s1&#x3D;sqrt(10.^(snr&#x2F;10))<em>exp(j</em>(2</em>pi</em>f0<em>t+pi&#x2F;1));<br>s2&#x3D;sqrt(10.^(snr&#x2F;10))<em>exp(j</em>(2</em>pi<em>f0</em>t+pi&#x2F;2));<br>s&#x3D;[s1;s2];%仿真信号,显然这是一个相干信源<br>%x&#x3D;awgn(s,snr);<br>x&#x3D;A<em>s+(1&#x2F;sqrt(2))</em>(randn(M,N)+j*randn(M,N));%加了高斯白噪声后的阵列接收信号<br>不难发现，这是通过复指数函数的方式产生的复信号，其幅度是稳定的，相位服从均匀分布。</p>
+</blockquote>
+<ul>
+<li>思考，为什么这样产生信号呢？</li>
+</ul>
+<h1 id="信号幅度稳定的原因"><a href="#信号幅度稳定的原因" class="headerlink" title="信号幅度稳定的原因"></a>信号幅度稳定的原因</h1><p>在上文讨论信号包络为瑞丽分布的时候，信号的频率为高频，经过多径传播，接收到的信号包络为瑞利分布，其描述的是在小尺度区间（几个波长到几十个波长）内接收信号幅度瞬时值的快速变化特性，实际进行采样时，通常会进行下变频，然后带通采样，这时，DOA估计使用的数据已经不是到达接收天线时的原始数据了，进行下变频后，信号包络变得平坦，考虑到前端的处理，此时信号幅度就采用的常信号的方式。 </p>
+<h1 id="产生方法3"><a href="#产生方法3" class="headerlink" title="产生方法3"></a>产生方法3</h1><p>方法3与方法2类似，结合方法1和方法2，信号的幅度稳定，相位随机，可以产生一组独立信号。 </p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>两种信号产生方式均合理，一种考虑的时天线接收到的模拟数据，一种考虑的是实际下变频后采样的数字信号，不同的场景下，有不同的信号产生方式，需要根据实际需要进行改变。</p>
+<h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h1><p>《通信原理》哈尔滨工程大学出版社，张晓林、宁晓燕，2017版<br>《随机信号分析》北京理工大学出版社，朱华<br>《深入浅出通信原理》</p>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>在做DOA估计之初（2018年下半年），就曾经思考过程序这样写的原因，当时问实验室多位师兄，王jianing师兄告诉我，他拿到这个程序也曾问过上面师兄师姐这个问题，未果，经过他的思考，第一种信号产生方式，p1到p4采用随机数是为了产生独立信号，现在再次思索，相位部分p2随机，即可产生独立信号，幅度部分的p1随机就未免没有意义了。<br>pengzhanli师兄告诉我，采用复信号的原因是为了降低带宽，会有好处，也符合实际应用场景中的IQ数据，但未解决为什么幅度这样做。<br>实验室也曾有师妹仿真文章，采用第一种信号产生方式，得不到想象中的结果，和原作者结果差异很大，多次查看程序，后发现，原作者采用实际中模型，信号幅度稳定，相位连续。<br>这个问题虽然很简单，我们做研究一般是针对算法的本体，很少对算法之前的工作进行研究思考，导致在细节上出错，因此记录下此博客，以此为戒，为后续其他人遇到相同的问题提供参考。</p>
+]]></content>
+      <categories>
+        <category>空间谱估计算法</category>
+      </categories>
+      <tags>
+        <tag>信号产生</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>DOA估计中信噪比问题</title>
+    <url>/DOAExtimation-%E4%BF%A1%E5%8F%B7%E6%A8%A1%E5%9E%8B2.html</url>
+    <content><![CDATA[<p>在某次做项目仿真时，产生了一个想法，我算了一下在所设定信噪比下，信号和噪声的信噪比是不是和设定值一致，惊奇的发现，设定值和计算值差了3dB，正好2022.11.01做论文仿真，再次验证信噪比时，出了点差错，次日，趁程序跑大循环，把之前笔记本上的记录搬到博客上，以此留念。</p>
+<p>无论是采用何种阵列、何种算法，经典的干涉仪测向算法也好，子空间类算法、稀疏重构类算法也罢，均匀阵列、稀疏阵列、MIMO等等各种阵列，仿真实验中，信噪比是影响算法性能的重要因素。本博客就不同信号产生模式，讨论不同信号产生方式中信噪比的使用，为后学者做参考。</p>
+<h1 id="信噪比的计算方式"><a href="#信噪比的计算方式" class="headerlink" title="信噪比的计算方式"></a>信噪比的计算方式</h1><p>对于有限长的信号，若均值为0，其方差即是功率，因此在程序中，若信号噪声的均值为0，只需要验证方差的比值即可得到信噪比<br>总功率&#x3D;均值*均值+方差</p>
+<h1 id="不同分布的方差"><a href="#不同分布的方差" class="headerlink" title="不同分布的方差"></a>不同分布的方差</h1><h2 id="正态分布1"><a href="#正态分布1" class="headerlink" title="正态分布1"></a>正态分布1</h2><blockquote>
+<p>S &#x3D; sqrt(a)*randn(1,10000)+b  方差为a，均值为b</p>
+</blockquote>
+<h2 id="正态分布2"><a href="#正态分布2" class="headerlink" title="正态分布2"></a>正态分布2</h2><blockquote>
+<p>S &#x3D; sqrt(-2* m*m *lnU1)cos(2 pi U2)+n  方差为m *m，均值为n<br>U1和U2为0到1的均匀分布</p>
+</blockquote>
+<h1 id="DOA估计中信号的产生"><a href="#DOA估计中信号的产生" class="headerlink" title="DOA估计中信号的产生"></a>DOA估计中信号的产生</h1><p>在上篇博客中，对DOA估计中信号的几种产生方式进行简要的讨论，本博客再次简要重述和补充  </p>
+<h2 id="方式1"><a href="#方式1" class="headerlink" title="方式1"></a>方式1</h2><p>首先给出噪声部分程序  </p>
+<figure class="highlight matlab"><table><tr><td class="code"><pre><span class="line">snr = <span class="number">10.</span>^(SNR/<span class="number">20</span>);  </span><br><span class="line"><span class="keyword">for</span> m=<span class="number">1</span>:sensorNum</span><br><span class="line">    <span class="keyword">for</span> n=<span class="number">1</span>:snapshots</span><br><span class="line">        p3=<span class="built_in">rand</span>(<span class="number">1</span>,<span class="number">1</span>);</span><br><span class="line">        p4=<span class="built_in">rand</span>(<span class="number">1</span>,<span class="number">1</span>);</span><br><span class="line">        wr(m,n)=<span class="built_in">sqrt</span>(<span class="number">-2</span>*<span class="built_in">log</span>(p3))*<span class="built_in">cos</span>(<span class="number">2</span>*<span class="built_in">pi</span>*p4);   <span class="comment">%根据正态分布2，噪声实部功率为1，虚部功率为1，总功率为2</span></span><br><span class="line">        wi(m,n)=<span class="built_in">sqrt</span>(<span class="number">-2</span>*<span class="built_in">log</span>(p3))*<span class="built_in">sin</span>(<span class="number">2</span>*<span class="built_in">pi</span>*p4);</span><br><span class="line">        NoiseMatrix(m,n)=wr(m,n)+<span class="number">1</span><span class="built_in">j</span>*wi(m,n);</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
+<p>信号的程序在噪声幅度上加上信噪比 </p>
+<figure class="highlight matlab"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> m=<span class="number">1</span>:<span class="number">1</span>  <span class="comment">%注意此处m仅到1</span></span><br><span class="line">    <span class="keyword">for</span> n=<span class="number">1</span>:snapshots</span><br><span class="line">        p1=<span class="built_in">rand</span>(<span class="number">1</span>,<span class="number">1</span>);</span><br><span class="line">        p2=<span class="built_in">rand</span>(<span class="number">1</span>,<span class="number">1</span>);</span><br><span class="line">        sr(m,n)=snr*<span class="built_in">sqrt</span>(<span class="number">-2</span>*<span class="built_in">log</span>(p1))*<span class="built_in">cos</span>(<span class="number">2</span>*<span class="built_in">pi</span>*p2); <span class="comment">%根据正态分布2，信号实部功率为snr*snr，虚部功率为snr*snr，总功率为2*snr*snr</span></span><br><span class="line">        si(m,n)=snr*<span class="built_in">sqrt</span>(<span class="number">-2</span>*<span class="built_in">log</span>(p1))*<span class="built_in">sin</span>(<span class="number">2</span>*<span class="built_in">pi</span>*p2);</span><br><span class="line">        SourceMatrix(m,n)=sr(m,n)+<span class="number">1</span><span class="built_in">j</span>*si(m,n);   <span class="comment">%signal</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
+<p>信噪比计算结果为SNR &#x3D; 10<em>log(2</em>snr*snr&#x2F;2)<br>snr &#x3D; 10.^(SNR&#x2F;20)<br>计算结果与设定值一致  </p>
+<h2 id="方式2"><a href="#方式2" class="headerlink" title="方式2"></a>方式2</h2><figure class="highlight matlab"><table><tr><td class="code"><pre><span class="line">Amp = <span class="number">10.</span>^(SNR/<span class="number">20</span>);  </span><br><span class="line">S = [Amp*<span class="built_in">exp</span>(<span class="number">1</span><span class="built_in">j</span>*(<span class="number">2</span>*<span class="built_in">pi</span>*(fcDown+<span class="number">1</span>*<span class="number">10</span>^<span class="number">6</span>)*((<span class="number">1</span>:kp)/(Fs))+Jitter(<span class="number">1</span>,:)))]; 信号功率为Amp*Amp            </span><br><span class="line"><span class="keyword">for</span> m=<span class="number">1</span>:SensorNum</span><br><span class="line">      <span class="keyword">for</span> n=<span class="number">1</span>:NoiseLength</span><br><span class="line">            p1=<span class="built_in">rand</span>(<span class="number">1</span>,<span class="number">1</span>);</span><br><span class="line">            p2=<span class="built_in">rand</span>(<span class="number">1</span>,<span class="number">1</span>);</span><br><span class="line">            wr(m,n)=<span class="built_in">sqrt</span>(<span class="number">-2</span>*<span class="number">0.5</span>*<span class="built_in">log</span>(p1))*<span class="built_in">cos</span>(<span class="number">2</span>*<span class="built_in">pi</span>*p2);   <span class="comment">%实部功率0.5</span></span><br><span class="line">            wi(m,n)=<span class="built_in">sqrt</span>(<span class="number">-2</span>*<span class="number">0.5</span>*<span class="built_in">log</span>(p1))*<span class="built_in">sin</span>(<span class="number">2</span>*<span class="built_in">pi</span>*p2);   <span class="comment">%实部功率0.5</span></span><br><span class="line">            w(m,n)=wr(m,n)+<span class="number">1</span><span class="built_in">j</span>*wi(m,n);</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span>  <span class="comment">%噪声部分   </span></span><br><span class="line">信噪比计算结果为SNR = <span class="number">10</span>*<span class="built_in">log</span>(Amp*Amp)  </span><br><span class="line">Amp = <span class="number">10.</span>^(SNR/<span class="number">20</span>)</span><br><span class="line">计算结果与设定值一致</span><br></pre></td></tr></table></figure>
+
+<h2 id="方式3"><a href="#方式3" class="headerlink" title="方式3"></a>方式3</h2><p>awgn函数，产生加性高斯白噪声 </p>
+<blockquote>
+<p>X &#x3D; awgn(A*S,snr，’measured’)  </p>
+</blockquote>
+<p>其中snr代表的是信号与噪声的功率之比<br>使用这个函数需要注意，加measured，表示噪声功率是根据信号的功率计算的，若不加measured，噪声的功率计算时，假定信号功率为1<br>例如：  </p>
+<blockquote>
+<p>awgn(100<em>ones(1,1000),10,’measured’) 信号功率为10000，噪声功率为998.98，信噪比10dB<br>awgn(10</em>ones(1,1000),10) 信号功率为100，噪声功率为0.1，噪声功率假定信号功率为1，10dB算出噪声功率为0.1<br>很明显，第二种方式产生的噪声的信噪比与我们的期望值差距甚远</p>
+</blockquote>
+<p><strong>方式3不太建议使用，在标量阵列中这样产生一定信噪比的信号貌似没有问题，但在矢量阵列中，这样方式产生的信噪比是AS和N的比值，但信噪比的定义是S和N的比值，标量阵列的A 的模一般为1，但矢量阵列A的模还与信号和天线的极化形式有关，这样产生方式在极化不匹配情况下影响较大</strong>  </p>
+<h2 id="方式4"><a href="#方式4" class="headerlink" title="方式4"></a>方式4</h2><blockquote>
+<p>Noise &#x3D; sqrt(0.5)randn(SN,Snap)+1j<em>sqrt(0.5)randn(SN,Snap)<br>Signal &#x3D; sqrt(0.5</em>snr)randn(SN,Snap)+1j<em>sqrt(0.5</em>snr)randn(SN,Snap)<br>snr &#x3D; 10^(SNR&#x2F;10)为功率之比</p>
+</blockquote>
+<p>根据正态分布1，噪声实部功率为0.5，虚部功率0.5，信号实部功率0.5*snr，虚部功率0.5 *snr<br>信噪比计算结果</p>
+<blockquote>
+<p>SNR &#x3D; 10*log(snr)<br>snr &#x3D; 10^(SNR&#x2F;10)<br>计算结果与设定值一致</p>
+</blockquote>
+<h1 id="信噪比计算程序"><a href="#信噪比计算程序" class="headerlink" title="信噪比计算程序"></a>信噪比计算程序</h1><pre><code class="Matlab">Data_Power=sum(abs(S1.^2))/length(S1);
+Data_Power2=sum(S1.*conj(S1))/length(S1);
+Data_Power1=sum(abs(w(1,:)).^2)/length(w);
+Pow = 10*log10(Data_Power/Data_Power1); 
+</code></pre>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>3dB，仅仅是信噪比是功率比值和幅度比值的微小差别<br>而且虽然说信噪比3dB的问题很小，甚至如果信噪比产生方式相同，在对比算法性能时，信噪比都相差3dB，问题也不大。但深究内部原因，还是信号产生部分存在缺陷，排除信噪3<br>dB这颗“雷”，总能避免掉一些未知的问题。</p>
+<h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h1><p>无  </p>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>思考一下，为什么差的是3dB呢，而不是4dB或5dB?3dB在别的地方是不是还有其他的含义。<br>还记得，在本科上《雷达原理》这门实验课，Zhangchunjie老师，提出了这个简单的问题，3dB到底有什么含义，在不同的应用领域，3dB带宽，3dB波束宽度等等</p>
+]]></content>
+      <categories>
+        <category>空间谱估计算法</category>
+      </categories>
+      <tags>
+        <tag>信号产生</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>个人博客中尚存问题</title>
+    <url>/Hexo-%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95.html</url>
+    <content><![CDATA[<h1 id="PDF嵌入问题"><a href="#PDF嵌入问题" class="headerlink" title="PDF嵌入问题"></a>PDF嵌入问题</h1><p><strong>在个人博客中，pdf虽然可以嵌入，但都不支持移动端的阅读。</strong><br>经查阅，需要使用pdf.js插件才可解决移动端和PC端的兼容性问题，此插件后续尝试</p>
+<h1 id="链接问题"><a href="#链接问题" class="headerlink" title="链接问题"></a>链接问题</h1><p> 此博客暂时没有加入链接跳转  </p>
+<h1 id="评论问题"><a href="#评论问题" class="headerlink" title="评论问题"></a>评论问题</h1><p> 此博客属于静态博客，暂时不支持评论，后续或许会增加评论功能  </p>
+<h1 id="主题问题"><a href="#主题问题" class="headerlink" title="主题问题"></a>主题问题</h1><p> 在themes里面可以更改主题，也可在github里选择主题，但暂时没必要，后续或许会更改</p>
+<h1 id="时限问题"><a href="#时限问题" class="headerlink" title="时限问题"></a>时限问题</h1><p> 此个人博客购买的域名到期时间为2025.08月，后续需要续费</p>
+]]></content>
+      <categories>
+        <category>Hexo博客搭建</category>
+      </categories>
+      <tags>
+        <tag>个人博客搭建</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>博客模板</title>
+    <url>/Hexo-%E6%A8%A1%E6%9D%BF.html</url>
+    <content><![CDATA[<p>我是短小精悍的文章摘要,这样，’<span id="more"></span>‘之前,文档配置参数之后中的内容便会被渲染为站点中的文章摘要</p>
+<!-- more -->
+
+<h1 id="文件头格式"><a href="#文件头格式" class="headerlink" title="文件头格式"></a>文件头格式</h1><ul>
+<li>Git个人博客使用的语言是Hexo，front-matter的基本格式示例如下：</li>
+<li>链接：<a href="https://hyxxsfwy.github.io/2016/01/15/Hexo-Markdown-%E7%AE%80%E6%98%8E%E8%AF%AD%E6%B3%95%E6%89%8B%E5%86%8C/">https://hyxxsfwy.github.io/2016/01/15/Hexo-Markdown-%E7%AE%80%E6%98%8E%E8%AF%AD%E6%B3%95%E6%89%8B%E5%86%8C/</a></li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">title：文章标题</span><br><span class="line">categories: 分类，在文章上面</span><br><span class="line">tags: 标签，在文章下面</span><br><span class="line">toc： 显示目录与否</span><br><span class="line">comments: 评论</span><br><span class="line">keywords： 关键词</span><br><span class="line">description： 在页面上描述本博客主要内容</span><br><span class="line">top: 置顶，但不好使，有置顶符号</span><br><span class="line">sticky: 置顶，可设置指定顺序，有置顶符号</span><br></pre></td></tr></table></figure>
+<h1 id="名称"><a href="#名称" class="headerlink" title="名称"></a>名称</h1><p>博客的文件夹的名称最好全英文，经实验，加入_会出现问题</p>
+<h1 id="标题"><a href="#标题" class="headerlink" title="标题"></a>标题</h1><p>一个#是一级标题，二个#是二级标题，以此类推  </p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 这是一级标题</span><br><span class="line">## 这是二级标题</span><br><span class="line">### 这是三级标题</span><br></pre></td></tr></table></figure>
+
+<h1 id="正文格式"><a href="#正文格式" class="headerlink" title="正文格式"></a>正文格式</h1><h2 id="字体"><a href="#字体" class="headerlink" title="字体"></a>字体</h2><p><strong>这是加粗的文字</strong><br><em>这是倾斜的文字</em>&#96;<br>上面四行只是单独回车，不能实现换行<br><em><strong>这是斜体加粗的文字</strong></em><br><del>这是加删除线的文字</del></p>
+<h2 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h2><p>杜丽娘:</p>
+<blockquote>
+<p>不到园林，怎知春色如许</p>
+</blockquote>
+<p>春香：</p>
+<blockquote>
+<p>便是  </p>
+</blockquote>
+<p>杜丽娘：</p>
+<blockquote>
+<p>原来姹紫嫣红开遍，似这般都付与断井颓垣。良辰美景奈何天，便赏心乐事谁家院？朝飞暮卷，云霞翠轩，雨丝风片，烟波画船。锦屏人忒看的这韶光贱！</p>
+</blockquote>
+<h2 id="换行"><a href="#换行" class="headerlink" title="换行"></a>换行</h2><p>两个空格加回车才是换行，单独回车可能存在不换行现象<br>一个-加空格也可实现换行的功能，但换行后会加黑点<br>数字加点加空格表示序号<br>例如：<br>这是例如后加回车键效果，在git中不换行</p>
+<h2 id="注释"><a href="#注释" class="headerlink" title="注释"></a>注释</h2><p>注释采用编辑&#x2F;切换块注释</p>
+<h1 id="图片"><a href="#图片" class="headerlink" title="图片"></a>图片</h1><p><strong>1.引用本地图片，将本地图片放到source&#x2F;_posts&#x2F;同名文件夹下，直接引用</strong></p>
+<ul>
+<li><img src="/Hexo-%E6%A8%A1%E6%9D%BF/google.png" alt="谷歌图片"><!-- 需要注意，这里的路径 --></li>
+</ul>
+<p><strong>2.引用本地图片，将本地图片放到source&#x2F;_posts&#x2F;同名文件夹下，会同步到<a href="https://github.com/QuMingchao/QuMingchao.github.io%E4%B8%AD%EF%BC%8C%E8%BF%99%E6%98%AFpublic%EF%BC%8C%E5%8F%98%E6%88%90%E7%BD%91%E7%BB%9C%E5%9B%BE%E7%89%87">https://github.com/QuMingchao/QuMingchao.github.io中，这是public，变成网络图片</a></strong><br>但这种方式可能会有github.com不能连接的问题  </p>
+<p><strong>3.将本地图片上传到图床中，第二种貌似用的就是github的图窗，但不稳定</strong><br><a href="https://imgse.com/i/xIbaoq"><img src="https://s1.ax1x.com/2022/10/30/xIbaoq.png" alt="xIbaoq.png"></a>  </p>
+<p><strong>4.指定图片大小</strong><br><embed src="./Hexo-模板/google.png" width="100%" height="100%" type="application/pdf">  <!-- type类型可以删除掉 --><br><img src="/Hexo-模板/google.png">  <!-- 需要注意，这里的路径，应该是解析时出现问题 --><br><embed src="./Hexo-模板/google.png" width="100%" height="50%" type="image/png" title="图片展示" align="center">  <!-- type类型https://blog.csdn.net/qiudechao1/article/details/100129764 --></p>
+<!-- embed使用说明见https://www.cnblogs.com/lgx5/p/5714494.html -->
+
+<p><strong>直接嵌入，还可以使用object和iframe等，需要注意标签的开和闭</strong><br><strong>在embed嵌入时，可以选择多种类型文件</strong><br><strong><audio>, <canvas>, <iframe>, <img>, <math>, <object>, <svg> 和 <video/></svg></object></math></iframe></canvas></audio></strong>  </p>
+<h1 id="pdf"><a href="#pdf" class="headerlink" title="pdf"></a>pdf</h1><p><strong>1.以hexo-pdf默认方式嵌入pdf</strong></p>
+<!-- 
+
+	<div class="row">
+    <embed src="https://cdn.jsdelivr.net/gh/Justlovesmile/CDN/pdf/小作文讲义.pdf" width="100%" height="550" type="application/pdf">
+	</div>
+
+
+   -->
+
+
+	<div class="row">
+    <embed src="./Hexo-模板/PRS.pdf" width="100%" height="550" type="application/pdf">
+	</div>
+
+
+  
+<!-- <embed src="./text/PRS.pdf" width="100%" height="550" type="application/pdf"></embed>  
+<object data="./text/PRS.pdf" width="100%" height="550" type="application/pdf"></object>  
+<iframe width="100%" scrolling=no height="800" frameborder="0" src="./text/PRS.pdf"></iframe>   -->
+<p><strong>几种方法均可实现嵌入pdf，但仅PC端可查看，手机端无法显示，且iframe进入页面会自动跳入下载pdf文件</strong></p>
+<!-- 链接：https://juejin.cn/post/7084037580756353038 -->
+
+<p>pdf.js阅读pdf</p>
+<!-- <iframe src='/vvd_js/pdfjs/web/viewer.html?file=' + encodeURIComponent('./Hexo-模板/PRS.pdf')' style='width:100%;height:100%'></iframe> -->
+
+
+<h1 id="压缩包等下载"><a href="#压缩包等下载" class="headerlink" title="压缩包等下载"></a>压缩包等下载</h1><p><a href="./Hexo-%E6%A8%A1%E6%9D%BF/%E5%8E%8B%E7%BC%A9%E5%8C%85.rar" title="压缩包名称">点击下载<img src="/Hexo-模板/google.png"></a>  </p>
+<!-- 参考：https://charlie_lee.gitee.io/blog/posts/680198be.html -->
+<!-- 可以在点击下载处加入图片更好点 -->
+<h1 id="视频音频"><a href="#视频音频" class="headerlink" title="视频音频"></a>视频音频</h1><p><strong>1.网站视频</strong></p>
+<div style="position: relative; width: 100%; height: 0; padding-bottom: 75%;"><iframe src="//player.bilibili.com/player.html?aid=39807850&cid=69927212&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" style="position: absolute; width: 100%; 
+height: 100%; left: 0; top: 0;"> </iframe></div>
+<!-- 参考：https://zhuanlan.zhihu.com/p/104996801 -->
+
+<p><strong>2.本地视频</strong></p>
+<div style="position: relative; width: 100%; height: 0; padding-bottom: 75%;"><embed src="./Hexo-模板/name.mp4" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" style="position: absolute; width: 100%; 
+height: 100%; left: 0; top: 0;"> </div>
+<!-- 以iframe嵌入的本地视频自动播放 -->
+
+<h1 id="公式"><a href="#公式" class="headerlink" title="公式"></a>公式</h1><p>公式的嵌入暂时不考虑，先以图片形式加入公式</p>
+<h1 id="网站主题"><a href="#网站主题" class="headerlink" title="网站主题"></a>网站主题</h1><p>可以在_congfig.yml更改themes，也可以自己建一个themes</p>
+<h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h1><p>Hexo使用常见问题可这里找下有没有你要的答案：<a href="https://yiwangmeng.com/common-problems-and-solutions-of-goodhexo">https://yiwangmeng.com/common-problems-and-solutions-of-goodhexo</a><br>图窗地址：<a href="https://imgse.com/">https://imgse.com/</a><br>导航地址：<a href="https://yiwangmeng.cn/">https://yiwangmeng.cn/</a></p>
+]]></content>
+      <categories>
+        <category>Hexo博客搭建</category>
+      </categories>
+      <tags>
+        <tag>个人博客搭建</tag>
+      </tags>
+  </entry>
+</search>
